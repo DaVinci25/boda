@@ -1,0 +1,48 @@
+<section class="faq-section section">
+  <div class="container">
+    <h1 class="section-title">Preguntas Frecuentes</h1>
+    <p class="section-subtitle">
+      Resolvemos todas tus dudas sobre nuestro día especial
+    </p>
+
+    <div class="faq-container">
+      <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+        <button 
+          class="faq-question" 
+          (click)="toggleFaq(i)"
+          [attr.aria-expanded]="faq.open">
+          <span class="question-text">{{ faq.question }}</span>
+          <span class="faq-icon" [class.open]="faq.open">+</span>
+        </button>
+        <div class="faq-answer" [class.open]="faq.open">
+          <div class="answer-content">
+            <p [innerHTML]="faq.answer"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-box">
+      <h2>¿Tienes otra pregunta?</h2>
+      <p>
+        Si no encuentras la respuesta que buscas, no dudes en contactarnos directamente. 
+        Estaremos encantados de ayudarte.
+      </p>
+      <div class="contact-info">
+        <p>
+          <strong>Email:</strong> 
+          <a href="mailto:Fouadn9&#64;gmail.com"> Fouadn9&#64;gmail.com</a>
+        </p>
+        <p>
+          <strong>Teléfono:</strong> 
+          <a href="tel:+34 600 07 54 39">+34 600 07 54 39</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h2>¿Listo para confirmar tu asistencia?</h2>
+      <a routerLink="/rsvp" class="btn-primary">Confirmar Asistencia</a>
+    </div>
+  </div>
+</section>

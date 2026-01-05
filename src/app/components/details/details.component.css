@@ -1,0 +1,322 @@
+.details-section {
+  background: var(--off-white);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 3rem;
+}
+
+.detail-card {
+  background: var(--white);
+  border-radius: 15px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.detail-icon {
+  font-size: 4rem;
+  flex-shrink: 0;
+}
+
+.detail-content {
+  flex: 1;
+}
+
+.detail-content h2 {
+  color: var(--brown);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.detail-item {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--gray);
+}
+
+.detail-item strong {
+  color: var(--black);
+}
+
+.timeline {
+  margin-top: 2rem;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--primary-gold), var(--dark-gold));
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+  padding-left: 2rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 0.5rem;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--primary-gold);
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 3px var(--primary-gold);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-gold);
+  margin-bottom: 0.5rem;
+}
+
+.event {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.3rem;
+}
+
+.description {
+  color: var(--gray);
+  font-size: 1rem;
+}
+
+.location-info {
+  margin-bottom: 2rem;
+}
+
+.venue-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 1rem;
+}
+
+.venue-address {
+  font-size: 1.1rem;
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.map-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-gold);
+  color: var(--white);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.map-button:hover {
+  background: var(--dark-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.map-image-container {
+  margin-top: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--off-white);
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.dress-code-info {
+  line-height: 1.8;
+}
+
+.dress-code-type {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-gold);
+  margin-bottom: 1rem;
+}
+
+.dress-suggestions {
+  background: var(--off-white);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+
+.suggestion {
+  margin-bottom: 1rem;
+  color: var(--gray);
+}
+
+.suggestion:last-child {
+  margin-bottom: 0;
+}
+
+.suggestion strong {
+  color: var(--black);
+}
+
+.dress-note {
+  margin-top: 1rem;
+  color: var(--gray);
+}
+
+.transport-info {
+  line-height: 1.8;
+}
+
+.transport-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+
+.transport-list li {
+  padding: 0.5rem 0;
+  color: var(--gray);
+}
+
+.transport-list strong {
+  color: var(--black);
+}
+
+.transport-note {
+  margin-top: 1rem;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.accommodation-info {
+  line-height: 1.8;
+}
+
+.hotel-info {
+  background: var(--off-white);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+}
+
+.hotel-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 0.5rem;
+}
+
+.hotel-address,
+.hotel-contact {
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+
+.hotel-code {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--light-gray);
+  color: var(--black);
+}
+
+.hotel-note {
+  margin-top: 1rem;
+  color: var(--gray);
+  font-size: 0.95rem;
+}
+
+.link {
+  color: var(--primary-gold);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: var(--dark-gold);
+}
+
+.cta-box {
+  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+  color: var(--white);
+  padding: 3rem;
+  border-radius: 15px;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta-box h2 {
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.cta-box p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.cta-box .link {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.cta-box .btn-primary {
+  background: var(--white);
+  color: var(--primary-gold);
+}
+
+.cta-box .btn-primary:hover {
+  background: var(--off-white);
+}
+
+@media (max-width: 768px) {
+  .detail-card {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+  }
+
+  .detail-icon {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .timeline {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item::before {
+    left: -1.75rem;
+  }
+}
+

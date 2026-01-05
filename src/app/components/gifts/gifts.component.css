@@ -1,0 +1,193 @@
+.gifts-section {
+  background: var(--off-white);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 3rem;
+}
+
+.gifts-intro {
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--gray);
+}
+
+.emphasis {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  color: var(--brown);
+}
+
+.gifts-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.gift-option {
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gift-option:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+.gift-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.gift-option h2 {
+  color: var(--brown);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.gift-option p {
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.store-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.store-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--primary-gold);
+  color: var(--white);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.store-link:hover {
+  background: var(--dark-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.gift-note {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.payment-info {
+  background: var(--off-white);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.payment-info p {
+  margin-bottom: 0.5rem;
+}
+
+.payment-info strong {
+  color: var(--black);
+}
+
+.account-details {
+  font-family: 'Courier New', monospace;
+  background: var(--white);
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--black);
+}
+
+.gifts-message {
+  max-width: 800px;
+  margin: 4rem auto;
+  background: var(--white);
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.gifts-message h2 {
+  color: var(--brown);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.gifts-message p {
+  color: var(--gray);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.gifts-message strong {
+  color: var(--brown);
+}
+
+.cta-box {
+  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+  color: var(--white);
+  padding: 3rem;
+  border-radius: 15px;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta-box h2 {
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.cta-box p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.cta-box .btn-primary {
+  background: var(--white);
+  color: var(--primary-gold);
+}
+
+.cta-box .btn-primary:hover {
+  background: var(--off-white);
+}
+
+@media (max-width: 768px) {
+  .gifts-options {
+    grid-template-columns: 1fr;
+  }
+
+  .gift-option {
+    padding: 2rem 1.5rem;
+  }
+
+  .gifts-message {
+    padding: 2rem 1.5rem;
+  }
+}
+

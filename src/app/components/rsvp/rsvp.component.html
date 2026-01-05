@@ -1,0 +1,237 @@
+<section class="rsvp-section section">
+  <div class="container">
+    <h1 class="section-title">Confirmar Asistencia</h1>
+    <p class="section-subtitle">
+      Por favor, confirma tu asistencia antes del 1 de Febrero de 2026. 
+      Tu respuesta nos ayudará a organizar mejor este día especial.
+    </p>
+
+    <div *ngIf="success" class="alert alert-success">
+      <h3>¡Gracias por confirmar!</h3>
+      <p>Hemos recibido tu confirmación. Te hemos enviado un correo de confirmación. 
+      ¡Nos vemos pronto en nuestra boda!</p>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">
+      <h3>Error al enviar</h3>
+      <p>Hubo un problema al enviar tu confirmación. Por favor, inténtalo de nuevo o 
+      contáctanos directamente.</p>
+    </div>
+
+    <form [formGroup]="rsvpForm" (ngSubmit)="onSubmit()" class="rsvp-form">
+      <!-- Confirmación de asistencia -->
+      <div class="form-group attendance-group">
+        <label class="form-label">¿Asistirás a nuestra boda? *</label>
+        <div class="attendance-buttons">
+          <button 
+            type="button" 
+            class="attendance-btn"
+            [class.active]="f['attendance'].value === 'yes'"
+            (click)="rsvpForm.patchValue({attendance: 'yes'})">
+            <span class="icon">✓</span>
+            <span>Sí, asistiré</span>
+          </button>
+          <button 
+            type="button" 
+            class="attendance-btn"
+            [class.active]="f['attendance'].value === 'no'"
+            (click)="rsvpForm.patchValue({attendance: 'no'})">
+            <span class="icon">✗</span>
+            <span>No podré asistir</span>
+          </button>
+        </div>
+        <input type="hidden" formControlName="attendance">
+        <div *ngIf="submitted && f['attendance'].errors" class="error-message">
+          Por favor, indica si asistirás o no
+        </div>
+      </div>
+
+      <!-- Información personal -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName" class="form-label">Nombre(s) *</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            formControlName="firstName" 
+            class="form-control"
+            [class.error]="submitted && f['firstName'].errors"
+            placeholder="Tu nombre">
+          <div *ngIf="submitted && f['firstName'].errors" class="error-message">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName" class="form-label">Apellidos *</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            formControlName="lastName" 
+            class="form-control"
+            [class.error]="submitted && f['lastName'].errors"
+            placeholder="Tus apellidos">
+          <div *ngIf="submitted && f['lastName'].errors" class="error-message">
+            Los apellidos son obligatorios
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email" class="form-label">Correo electrónico *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            class="form-control"
+            [class.error]="submitted && f['email'].errors"
+            placeholder="tu@email.com">
+          <div *ngIf="submitted && f['email'].errors" class="error-message">
+            <span *ngIf="f['email'].errors?.['required']">El correo es obligatorio</span>
+            <span *ngIf="f['email'].errors?.['email']">Correo electrónico inválido</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Teléfono (opcional)</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            class="form-control"
+            placeholder="+34 600 000 000">
+        </div>
+      </div>
+
+      <!-- Información de acompañantes (solo si asiste) -->
+      <div *ngIf="isAttending" class="guests-section">
+        <div class="form-group">
+          <label for="totalGuests" class="form-label">
+            ¿Cuántas personas vienen en total? (incluyéndote) *
+          </label>
+          <input 
+            type="number" 
+            id="totalGuests" 
+            formControlName="totalGuests" 
+            class="form-control"
+            [class.error]="submitted && f['totalGuests'].errors"
+            min="1"
+            max="20">
+          <div *ngIf="submitted && f['totalGuests'].errors" class="error-message">
+            Por favor, indica el número de personas
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="f['totalGuests'].value > 1">
+          <label for="guestNames" class="form-label">
+            Nombres de los acompañantes
+          </label>
+          <textarea 
+            id="guestNames" 
+            formControlName="guestNames" 
+            class="form-control"
+            rows="3"
+            placeholder="Escribe los nombres de tus acompañantes separados por comas"></textarea>
+          <small class="form-help">Ejemplo: María García, Juan Pérez</small>
+        </div>
+
+        <!-- Información sobre hijos -->
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              formControlName="bringingChildren"
+              id="bringingChildren">
+            <span>¿Vas a traer hijos?</span>
+          </label>
+        </div>
+
+        <div class="form-group" *ngIf="isBringingChildren">
+          <label for="numberOfChildren" class="form-label">
+            ¿Cuántos hijos vais a traer? *
+          </label>
+          <input 
+            type="number" 
+            id="numberOfChildren" 
+            formControlName="numberOfChildren" 
+            class="form-control"
+            [class.error]="submitted && f['numberOfChildren'].errors"
+            min="1"
+            max="10"
+            placeholder="Número de hijos">
+          <div *ngIf="submitted && f['numberOfChildren'].errors" class="error-message">
+            Por favor, indica el número de hijos
+          </div>
+          <small class="form-help">Incluye la edad de los niños en el campo de restricciones dietéticas si es necesario</small>
+        </div>
+      </div>
+
+     
+
+      <!-- Canción sugerida (solo si asiste) -->
+      <div *ngIf="isAttending" class="form-group">
+        <label for="songRequest" class="form-label">
+          ¿Tienes alguna canción que te gustaría escuchar en la fiesta?
+        </label>
+        <input 
+          type="text" 
+          id="songRequest" 
+          formControlName="songRequest" 
+          class="form-control"
+          placeholder="Artista - Canción">
+      </div>
+
+      <!-- Mensaje para los novios -->
+      <div class="form-group">
+        <label for="message" class="form-label">
+          Mensaje para los novios (opcional)
+        </label>
+        <textarea 
+          id="message" 
+          formControlName="message" 
+          class="form-control"
+          rows="4"
+          placeholder="Escribe un mensaje especial para los novios..."></textarea>
+      </div>
+
+      <!-- Mensaje si no asiste -->
+      <div *ngIf="isNotAttending" class="form-group">
+        <label for="message" class="form-label">
+          Mensaje (opcional)
+        </label>
+        <textarea 
+          id="message" 
+          formControlName="message" 
+          class="form-control"
+          rows="4"
+          placeholder="Lamentamos que no puedas asistir. Si quieres, déjanos un mensaje..."></textarea>
+      </div>
+
+      <!-- Consentimiento de privacidad -->
+      <div class="form-group privacy-consent">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            formControlName="privacyConsent"
+            [class.error]="submitted && f['privacyConsent'].errors">
+          <span>
+            Acepto que mis datos sean utilizados únicamente para la organización de la boda. 
+            No compartiremos tu información con terceros. *
+          </span>
+        </label>
+        <div *ngIf="submitted && f['privacyConsent'].errors" class="error-message">
+          Debes aceptar el consentimiento de privacidad
+        </div>
+      </div>
+
+      <!-- Botón de envío -->
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="submitted && rsvpForm.invalid">
+          <span *ngIf="!submitted">Enviar Confirmación</span>
+          <span *ngIf="submitted">Enviando...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
