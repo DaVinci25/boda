@@ -5,10 +5,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(201, 162, 39, 0.2) 100%),
-              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23F5E6D3" width="1200" height="800"/></svg>');
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(201, 162, 39, 0.3) 100%),
+              url('../../../assets/images/flor.webp');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   text-align: center;
   color: var(--black);
   overflow: hidden;
@@ -20,7 +21,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.4);
   z-index: 1;
 }
 
@@ -128,6 +129,26 @@
 .welcome-text {
   font-size: 1.1rem;
   line-height: 1.8;
+}
+
+.welcome-image-container {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.welcome-image-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
 }
 
 .lead {
@@ -255,6 +276,11 @@
 
   .welcome-content {
     grid-template-columns: 1fr;
+  }
+
+  .welcome-image-container {
+    margin-top: 2rem;
+    order: -1;
   }
 
   .info-grid {
