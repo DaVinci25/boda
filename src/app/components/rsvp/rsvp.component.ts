@@ -37,9 +37,13 @@ export class RsvpComponent {
       privacyConsent: [false, Validators.requiredTrue]
     });
 
+    const totalGuestsControl = this.rsvpForm.get('totalGuests');
+
     // Mostrar campos adicionales solo si asiste
     this.rsvpForm.get('attendance')?.valueChanges.subscribe(value => {
       if (value === 'no') {
+        // Si NO asiste, totalGuests deja de ser obligatorio
+        totalGuestsControl?.clearValidators();
         this.rsvpForm.patchValue({
           totalGuests: 0,
           bringingChildren: false,
@@ -48,10 +52,14 @@ export class RsvpComponent {
           dietaryRestrictions: '',
           songRequest: ''
         });
+        totalGuestsControl?.updateValueAndValidity();
       } else if (value === 'yes') {
+        // Si SÍ asiste, totalGuests vuelve a ser obligatorio (mínimo 1)
+        totalGuestsControl?.setValidators([Validators.required, Validators.min(1)]);
         this.rsvpForm.patchValue({
           totalGuests: 1
         });
+        totalGuestsControl?.updateValueAndValidity();
       }
     });
 
@@ -85,8 +93,10 @@ export class RsvpComponent {
     const formData = this.rsvpForm.value;
     
     // Enviar datos al servicio
+    console.log('Formulario enviado, datos:', formData);
     this.rsvpService.submitRsvp(formData).subscribe({
       next: (response) => {
+        console.log('Respuesta de Formspree:', response);
         // Notificar a los novios
         this.rsvpService.notifyCouple(formData).subscribe();
         
@@ -99,6 +109,11 @@ export class RsvpComponent {
       error: (error) => {
         this.error = true;
         console.error('Error al enviar RSVP:', error);
+        console.error('Detalles del error:', {
+          status: error.status,
+          message: error.message,
+          error: error.error
+        });
       }
     });
   }

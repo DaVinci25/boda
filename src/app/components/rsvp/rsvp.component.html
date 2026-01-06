@@ -108,19 +108,15 @@
       <div *ngIf="isAttending" class="guests-section">
         <div class="form-group">
           <label for="totalGuests" class="form-label">
-            ¿Cuántas personas vienen en total? (incluyéndote) *
+            ¿Cuántas personas vienen en total? (incluyéndote)
           </label>
           <input 
             type="number" 
             id="totalGuests" 
             formControlName="totalGuests" 
             class="form-control"
-            [class.error]="submitted && f['totalGuests'].errors"
             min="1"
             max="20">
-          <div *ngIf="submitted && f['totalGuests'].errors" class="error-message">
-            Por favor, indica el número de personas
-          </div>
         </div>
 
         <div class="form-group" *ngIf="f['totalGuests'].value > 1">
@@ -149,20 +145,16 @@
 
         <div class="form-group" *ngIf="isBringingChildren">
           <label for="numberOfChildren" class="form-label">
-            ¿Cuántos hijos vais a traer? *
+            ¿Cuántos hijos vais a traer?
           </label>
           <input 
             type="number" 
             id="numberOfChildren" 
             formControlName="numberOfChildren" 
             class="form-control"
-            [class.error]="submitted && f['numberOfChildren'].errors"
             min="1"
             max="10"
             placeholder="Número de hijos">
-          <div *ngIf="submitted && f['numberOfChildren'].errors" class="error-message">
-            Por favor, indica el número de hijos
-          </div>
           <small class="form-help">Incluye la edad de los niños en el campo de restricciones dietéticas si es necesario</small>
         </div>
       </div>

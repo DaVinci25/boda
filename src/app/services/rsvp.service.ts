@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
@@ -22,40 +23,40 @@ export interface RsvpData {
 })
 export class RsvpService {
 
-  constructor() { }
+  // Endpoint de Formspree (configurado para enviar a tu email)
+  private readonly FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbdlvenq';
+
+  constructor(private http: HttpClient) { }
 
   submitRsvp(data: RsvpData): Observable<any> {
-    // En producción, aquí harías una llamada HTTP real a tu backend
-    // Por ahora, simulamos una respuesta exitosa
-    
-    console.log('RSVP Data:', data);
-    
-    // Aquí podrías integrar con:
-    // - Un servicio de email (EmailJS, SendGrid, etc.)
-    // - Un backend propio
-    // - Google Forms API
-    // - Formspree u otro servicio de formularios
-    
-    // Ejemplo de integración con EmailJS (comentado):
-    /*
-    return this.http.post('https://api.emailjs.com/api/v1.0/email/send', {
-      service_id: 'YOUR_SERVICE_ID',
-      template_id: 'YOUR_TEMPLATE_ID',
-      user_id: 'YOUR_USER_ID',
-      template_params: {
-        to_email: data.email,
-        from_name: `${data.firstName} ${data.lastName}`,
-        attendance: data.attendance,
-        total_guests: data.totalGuests,
-        message: data.message
-      }
+    // Mapeamos los datos del formulario Angular al formato que recibirá Formspree
+    // Formspree enviará el correo a la dirección configurada en su panel
+    const payload = {
+      // Campos principales que verás en el email
+      nombre_completo: `${data.firstName} ${data.lastName}`,
+      correo_invitado: data.email,
+      telefono: data.phone ?? '',
+      asistencia: data.attendance === 'yes' ? 'Sí' : 'No',
+      numero_personas: data.totalGuests,
+      nombres_acompanantes: data.guestNames ?? '',
+      tipo_menu: (data as any).menuType ?? '',
+      restricciones_dieteticas: data.dietaryRestrictions ?? '',
+      cancion_sugerida: data.songRequest ?? '',
+      mensaje_para_los_novios: data.message ?? '',
+
+      // Campo especial que Formspree suele usar como "from"
+      email: data.email,
+      _subject: 'Nueva confirmación de asistencia (RSVP)',
+    };
+
+    console.log('Enviando RSVP a Formspree:', payload);
+
+    return this.http.post(this.FORMSPREE_ENDPOINT, payload, {
+      headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
     });
-    */
-    
-    // Simulación de respuesta exitosa
-    return of({ success: true, message: 'RSVP enviado correctamente' }).pipe(
-      delay(1000) // Simula latencia de red
-    );
   }
 
   // Método para enviar notificación a los novios
