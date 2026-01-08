@@ -1,10 +1,12 @@
 /* Estilos globales - Tema elegante/clásico para boda */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&family=Dancing+Script:wght@400;600;700&display=swap');
 
 :root {
   --primary-gold: #D4AF37;
   --dark-gold: #C9A227;
   --light-gold: #F5E6D3;
+  --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 50%, #C9A227 100%);
+  --gold-gradient-soft: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(244, 208, 63, 0.1) 100%);
   --white: #FFFFFF;
   --off-white: #FAFAFA;
   --black: #1A1A1A;
@@ -12,6 +14,11 @@
   --light-gray: #E5E5E5;
   --brown: #8B4513;
   --rose: #F5E6D3;
+  --shadow-soft: 0 2px 15px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 25px rgba(0, 0, 0, 0.12);
+  --shadow-strong: 0 8px 35px rgba(0, 0, 0, 0.15);
+  --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.25);
+  --shadow-gold-strong: 0 8px 30px rgba(212, 175, 55, 0.35);
 }
 
 * {
@@ -66,38 +73,76 @@ button {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+  background: var(--gold-gradient);
   color: var(--white);
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
+  padding: 1.1rem 2.8rem;
+  border-radius: 50px;
   font-size: 1.1rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-  transition: all 0.3s ease;
+  letter-spacing: 1.5px;
+  box-shadow: var(--shadow-gold);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-gold-strong);
 }
 
 .btn-secondary {
   background: transparent;
   color: var(--primary-gold);
-  padding: 1rem 2.5rem;
-  border: 2px solid var(--primary-gold);
-  border-radius: 30px;
+  padding: 1.1rem 2.8rem;
+  border: 2.5px solid var(--primary-gold);
+  border-radius: 50px;
   font-size: 1.1rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--gold-gradient);
+  transition: width 0.4s ease;
+  z-index: -1;
 }
 
 .btn-secondary:hover {
-  background: var(--primary-gold);
   color: var(--white);
+  border-color: var(--dark-gold);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-secondary:hover::before {
+  width: 100%;
 }
 
 .section {
@@ -110,18 +155,42 @@ button {
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
+  font-size: 3rem;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .section-title::after {
+  content: '❦';
+  position: absolute;
+  bottom: -8px;
+  left: calc(50% - 80px);
+  color: var(--primary-gold);
+  font-size: 1.2rem;
+  opacity: 0.6;
+  animation: float 3s ease-in-out infinite;
+}
+
+.section-title::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+  width: 120px;
+  height: 4px;
+  background: var(--gold-gradient);
+  border-radius: 2px;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
 }
 
 .container {
@@ -134,19 +203,62 @@ button {
 .photo-placeholder {
   width: 100%;
   height: 400px;
-  background: var(--light-gray);
+  background: linear-gradient(135deg, var(--light-gray) 0%, var(--off-white) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 15px;
   margin: 2rem 0;
   color: var(--gray);
   font-style: italic;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
 }
 
 .photo-placeholder::before {
   content: '📷 Espacio para foto';
   font-size: 1.2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.photo-placeholder::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: var(--gold-gradient-soft);
+  opacity: 0.3;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+}
+
+/* Animaciones globales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Responsive */
@@ -167,9 +279,13 @@ button {
     padding: 3rem 1rem;
   }
 
+  .section-title {
+    font-size: 2rem;
+  }
+
   .btn-primary,
   .btn-secondary {
-    padding: 0.8rem 2rem;
+    padding: 0.9rem 2rem;
     font-size: 1rem;
   }
 }
