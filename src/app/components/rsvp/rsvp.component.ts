@@ -1,168 +1,132 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RsvpService, RsvpData } from '../../services/rsvp.service';
+import { RsvpService } from '../../services/rsvp.service';
 
 @Component({
   selector: 'app-rsvp',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './rsvp.component.html',
-  styleUrls: ['./rsvp.component.css']
+  styleUrl: './rsvp.component.css'
 })
-export class RsvpComponent implements OnInit {
+export class RsvpComponent {
   rsvpForm: FormGroup;
   submitted = false;
   success = false;
   error = false;
-  errorMessage = '';
-  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private rsvpService: RsvpService
   ) {
-    this.rsvpForm = this.createForm();
-  }
-
-  ngOnInit(): void {
-    this.setupFormListeners();
-  }
-
-  private createForm(): FormGroup {
-    return this.fb.group({
+    this.rsvpForm = this.fb.group({
       attendance: ['', Validators.required],
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
       totalGuests: [1, [Validators.required, Validators.min(1)]],
       guestNames: [''],
       bringingChildren: [false],
-      numberOfChildren: [0],
+      numberOfChildren: [0, [Validators.min(0)]],
       menuType: [''],
       dietaryRestrictions: [''],
       songRequest: [''],
       message: [''],
       privacyConsent: [false, Validators.requiredTrue]
     });
-  }
 
-  private setupFormListeners(): void {
-    // Controlar asistencia
-    this.rsvpForm.get('attendance')?.valueChanges.subscribe((value: string) => {
-      const totalGuestsControl = this.rsvpForm.get('totalGuests');
-      
+    const totalGuestsControl = this.rsvpForm.get('totalGuests');
+
+    // Mostrar campos adicionales solo si asiste
+    this.rsvpForm.get('attendance')?.valueChanges.subscribe(value => {
       if (value === 'no') {
+        // Si NO asiste, totalGuests deja de ser obligatorio
         totalGuestsControl?.clearValidators();
-        totalGuestsControl?.setValue(0);
         this.rsvpForm.patchValue({
+          totalGuests: 0,
           bringingChildren: false,
-          numberOfChildren: 0
-        }, { emitEvent: false });
-      } else {
+          numberOfChildren: 0,
+          menuType: '',
+          dietaryRestrictions: '',
+          songRequest: ''
+        });
+        totalGuestsControl?.updateValueAndValidity();
+      } else if (value === 'yes') {
+        // Si SÍ asiste, totalGuests vuelve a ser obligatorio (mínimo 1)
         totalGuestsControl?.setValidators([Validators.required, Validators.min(1)]);
-        totalGuestsControl?.setValue(1, { emitEvent: false });
+        this.rsvpForm.patchValue({
+          totalGuests: 1
+        });
+        totalGuestsControl?.updateValueAndValidity();
       }
-      totalGuestsControl?.updateValueAndValidity();
     });
 
-    // Controlar hijos
-    this.rsvpForm.get('bringingChildren')?.valueChanges.subscribe((value: boolean) => {
-      const childrenControl = this.rsvpForm.get('numberOfChildren');
+    // Resetear número de hijos si no traen hijos y actualizar validación
+    this.rsvpForm.get('bringingChildren')?.valueChanges.subscribe(value => {
+      const numberOfChildrenControl = this.rsvpForm.get('numberOfChildren');
       if (!value) {
-        childrenControl?.setValue(0);
+        this.rsvpForm.patchValue({
+          numberOfChildren: 0
+        });
+        numberOfChildrenControl?.clearValidators();
+      } else {
+        numberOfChildrenControl?.setValidators([Validators.required, Validators.min(1)]);
       }
+      numberOfChildrenControl?.updateValueAndValidity();
     });
   }
 
-  // Getter para acceder a los controles
   get f() {
     return this.rsvpForm.controls;
   }
 
-  onSubmit(): void {
+  onSubmit() {
     this.submitted = true;
     this.error = false;
-    this.success = false;
-    this.errorMessage = '';
 
     if (this.rsvpForm.invalid) {
-      // Marcar todos los controles como tocados
-      Object.keys(this.rsvpForm.controls).forEach(key => {
-        const control = this.rsvpForm.get(key);
-        control?.markAsTouched();
-      });
       return;
     }
 
-    this.isLoading = true;
-    const formData: RsvpData = this.rsvpForm.value;
-
+    const formData = this.rsvpForm.value;
+    
+    // Enviar datos al servicio
+    console.log('Formulario enviado, datos:', formData);
     this.rsvpService.submitRsvp(formData).subscribe({
-      next: (response: any) => {
-        console.log('✅ RSVP enviado:', response);
-        
-        // Notificar a los novios (opcional)
+      next: (response) => {
+        console.log('Respuesta de Formspree:', response);
+        // Notificar a los novios
         this.rsvpService.notifyCouple(formData).subscribe();
         
         this.success = true;
-        this.resetForm();
-        this.scrollToTop();
+        this.rsvpForm.reset();
+        this.submitted = false;
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       },
-      error: (error: Error) => {
-        console.error('❌ Error:', error);
+      error: (error) => {
         this.error = true;
-        this.errorMessage = error.message || 'Error al enviar la confirmación';
-      },
-      complete: () => {
-        this.isLoading = false;
+        console.error('Error al enviar RSVP:', error);
+        console.error('Detalles del error:', {
+          status: error.status,
+          message: error.message,
+          error: error.error
+        });
       }
     });
   }
 
-  private resetForm(): void {
-    this.rsvpForm.reset({
-      attendance: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      totalGuests: 1,
-      guestNames: '',
-      bringingChildren: false,
-      numberOfChildren: 0,
-      menuType: '',
-      dietaryRestrictions: '',
-      songRequest: '',
-      message: '',
-      privacyConsent: false
-    });
-    this.submitted = false;
-  }
-
-  private scrollToTop(): void {
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
-  }
-
-  // Getters para la vista
-  get isAttending(): boolean {
+  get isAttending() {
     return this.rsvpForm.get('attendance')?.value === 'yes';
   }
 
-  get isNotAttending(): boolean {
+  get isNotAttending() {
     return this.rsvpForm.get('attendance')?.value === 'no';
   }
 
-  get isBringingChildren(): boolean {
+  get isBringingChildren() {
     return this.rsvpForm.get('bringingChildren')?.value === true;
-  }
-
-  // Helper para mostrar errores
-  showError(controlName: string): boolean {
-    const control = this.rsvpForm.get(controlName);
-    return !!control && control.invalid && (control.touched || this.submitted);
   }
 }
