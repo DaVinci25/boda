@@ -8,12 +8,12 @@
         <span></span>
       </button>
       <ul class="nav-menu" [class.active]="menuOpen">
-        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
-        <!-- <li><a routerLink="/historia" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Nuestra Historia</a></li> -->
-        <li><a routerLink="/detalles" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Detalles</a></li>
-        <li><a routerLink="/rsvp" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()" class="rsvp-link">Confirmar Asistencia</a></li>
-        <li><a routerLink="/regalos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Regalos</a></li>
-        <li><a routerLink="/faq" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">FAQ</a></li>
+        <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Inicio</a></li>
+        <!-- <li><a routerLink="/historia" routerLinkActive="active" (click)="closeMenu()">Nuestra Historia</a></li> -->
+        <li><a routerLink="/detalles" routerLinkActive="active" (click)="closeMenu()">Detalles</a></li>
+        <li><a routerLink="/rsvp" routerLinkActive="active" (click)="closeMenu()" class="rsvp-link">Confirmar Asistencia</a></li>
+        <li><a routerLink="/regalos" routerLinkActive="active" (click)="closeMenu()">Regalos</a></li>
+        <li><a routerLink="/faq" routerLinkActive="active" (click)="closeMenu()">FAQ</a></li>
       </ul>
     </div>
   </nav>
