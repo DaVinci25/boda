@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, delay, switchMap } from 'rxjs/operators';
+import emailjs from '@emailjs/browser';
 
 export interface RsvpData {
   attendance: string;
@@ -29,10 +30,23 @@ export class RsvpService {
   // ✅ CORREGIR: Usa esta URL del Web App (la que tienes al final)
   private readonly GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUTzJRY0ROLlcmWmGt5qkIJ7ZeM67q-BRvytiZc8_CNP2EJ5p2__jy1e3FP5YmucAzAQ/exec';
   
-  private readonly FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${this.DESTINATION_EMAIL}`;
-  private mode: 'both' | 'google-only' | 'formsubmit-only' = 'both';
+  // EmailJS Configuration
+  // ⚠️ IMPORTANTE: Configura tu template en EmailJS con estas variables:
+  // - {{to_email}} o {{to_name}} (destinatario: said25022004@gmail.com)
+  // - {{from_name}} (nombre del invitado)
+  // - {{from_email}} (email del invitado)
+  // - {{subject}} (asunto del email)
+  // - {{message}} (mensaje completo con todos los datos)
+  // - {{reply_to}} (email para responder)
+  private readonly EMAILJS_PUBLIC_KEY = '-7C68t79wbzSpGIQ8';
+  private readonly EMAILJS_SERVICE_ID = 'service_wzrp0vj'; // También mencionaste: service_n0cmfoe
+  private readonly EMAILJS_TEMPLATE_ID = '__ejs-test-mail-service__'; // ⚠️ CAMBIA ESTE ID por el ID real de tu template en EmailJS
+  
+  private mode: 'both' | 'google-only' | 'emailjs-only' = 'emailjs-only'; // Solo EmailJS para evitar duplicados en Excel
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    // EmailJS se inicializa automáticamente al usar send()
+  }
 
   submitRsvp(data: RsvpData): Observable<any> {
     console.log(`📤 Enviando RSVP en modo: ${this.mode}`);
@@ -40,8 +54,8 @@ export class RsvpService {
     switch (this.mode) {
       case 'google-only':
         return this.sendToGoogleScript(data);
-      case 'formsubmit-only':
-        return this.sendToFormsubmit(data);
+      case 'emailjs-only':
+        return this.sendToEmailJS(data);
       case 'both':
       default:
         return this.sendToBoth(data);
@@ -49,17 +63,17 @@ export class RsvpService {
   }
 
   private sendToBoth(data: RsvpData): Observable<any> {
-    return this.sendToFormsubmit(data).pipe(
-      catchError((formsubmitError: any) => {
-        console.warn('⚠️ Formsubmit falló, intentando solo Google Script:', formsubmitError);
+    return this.sendToEmailJS(data).pipe(
+      catchError((emailjsError: any) => {
+        console.warn('⚠️ EmailJS falló, intentando solo Google Script:', emailjsError);
         return this.sendToGoogleScript(data);
       }),
-      switchMap((formsubmitResponse: any) => {
-        console.log('✅ Formsubmit exitoso, enviando backup a Google Script...');
+      switchMap((emailjsResponse: any) => {
+        console.log('✅ EmailJS exitoso, enviando backup a Google Script...');
         return this.sendToGoogleScript(data).pipe(
           catchError((googleError: any) => {
-            console.warn('⚠️ Google Script falló, pero Formsubmit ya funcionó');
-            return of(formsubmitResponse);
+            console.warn('⚠️ Google Script falló, pero EmailJS ya funcionó');
+            return of(emailjsResponse);
           })
         );
       })
@@ -99,28 +113,61 @@ export class RsvpService {
     );
   }
 
-  private sendToFormsubmit(data: RsvpData): Observable<any> {
-    const payload = {
-      name: `${data.firstName} ${data.lastName}`,
-      email: data.email,
-      phone: data.phone || 'No proporcionado',
+  private sendToEmailJS(data: RsvpData): Observable<any> {
+    // Parámetros del template - asegúrate de que coincidan con las variables en tu template de EmailJS
+    const templateParams: Record<string, string> = {
+      to_email: this.DESTINATION_EMAIL,
+      to_name: 'Said', // Nombre del destinatario
+      from_name: `${data.firstName} ${data.lastName}`,
+      from_email: data.email,
+      reply_to: data.email,
+      subject: `💍 Confirmación Boda - ${data.firstName} ${data.lastName}`,
       message: this.formatEmailMessage(data),
-      _subject: `💍 Confirmación Boda - ${data.firstName} ${data.lastName}`,
-      _template: 'box',
-      _captcha: 'false',
-      _autoresponse: this.formatAutoResponse(data),
+      // Campos adicionales para el template
+      attendance: data.attendance === 'yes' ? '✅ SÍ' : '❌ NO',
+      total_guests: data.totalGuests.toString(),
+      guest_names: data.guestNames || 'N/A',
+      bringing_children: data.bringingChildren ? 'Sí' : 'No',
+      number_of_children: (data.numberOfChildren || 0).toString(),
+      menu_type: data.menuType || 'N/A',
+      dietary_restrictions: data.dietaryRestrictions || 'Ninguna',
+      song_request: data.songRequest || 'Ninguna',
+      personal_message: data.message || 'Ninguno',
+      phone: data.phone || 'No proporcionado',
+      // Auto-respuesta para el invitado (si tu template lo soporta)
+      auto_response: this.formatAutoResponse(data)
     };
 
-    console.log('📧 Enviando a Formsubmit:', payload);
+    console.log('📧 Enviando a EmailJS:');
+    console.log('  Service ID:', this.EMAILJS_SERVICE_ID);
+    console.log('  Template ID:', this.EMAILJS_TEMPLATE_ID);
+    console.log('  Public Key:', this.EMAILJS_PUBLIC_KEY);
+    console.log('  Template Params:', templateParams);
 
-    return this.http.post(this.FORMSUBMIT_ENDPOINT, payload, {
-      headers: { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).pipe(
-      catchError((error: HttpErrorResponse) => this.handleFormsubmitError(error))
-    );
+    return new Observable(observer => {
+      emailjs.send(
+        this.EMAILJS_SERVICE_ID,
+        this.EMAILJS_TEMPLATE_ID,
+        templateParams,
+        {
+          publicKey: this.EMAILJS_PUBLIC_KEY
+        }
+      )
+      .then((response) => {
+        console.log('✅ EmailJS enviado exitosamente:', response);
+        console.log('  Status:', response.status);
+        console.log('  Text:', response.text);
+        observer.next({ success: true, status: response.status, text: response.text });
+        observer.complete();
+      })
+      .catch((error) => {
+        console.error('❌ Error EmailJS completo:', error);
+        console.error('  Status:', error.status);
+        console.error('  Text:', error.text);
+        console.error('  Message:', error.message);
+        observer.error(this.handleEmailJSError(error));
+      });
+    });
   }
 
   private handleGoogleError(error: HttpErrorResponse): Observable<never> {
@@ -138,19 +185,33 @@ export class RsvpService {
     return throwError(() => new Error(errorMessage));
   }
 
-  private handleFormsubmitError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Error con Formsubmit';
-    if (error.status === 429) {
-      errorMessage = 'Límite de Formsubmit alcanzado.';
-    } else if (error.status === 403) {
-      errorMessage = 'Formsubmit: Email no verificado.';
-    } else if (error.status === 0) {
-      errorMessage = 'Error de conexión con Formsubmit.';
+  private handleEmailJSError(error: any): Error {
+    let errorMessage = 'Error con EmailJS';
+    
+    // Log completo del error para debugging
+    console.error('🔍 Detalles del error EmailJS:', {
+      status: error.status,
+      statusText: error.statusText,
+      text: error.text,
+      message: error.message,
+      error: error
+    });
+    
+    if (error.status === 0 || error.status === 400) {
+      errorMessage = 'Error de configuración de EmailJS. Verifica las credenciales (Service ID, Template ID, Public Key).';
+    } else if (error.status === 401) {
+      errorMessage = 'EmailJS: Clave pública inválida. Verifica tu Public Key.';
+    } else if (error.status === 404) {
+      errorMessage = `EmailJS: Service ID (${this.EMAILJS_SERVICE_ID}) o Template ID (${this.EMAILJS_TEMPLATE_ID}) no encontrado. Verifica que existan en tu cuenta de EmailJS.`;
+    } else if (error.status === 429) {
+      errorMessage = 'EmailJS: Límite de envíos alcanzado.';
     } else {
-      errorMessage = `Error Formsubmit ${error.status}: ${error.message}`;
+      const errorText = error.text || error.message || 'Error desconocido';
+      errorMessage = `Error EmailJS ${error.status || 'desconocido'}: ${errorText}`;
     }
-    console.error('❌ Error Formsubmit:', errorMessage);
-    return throwError(() => new Error(errorMessage));
+    
+    console.error('❌ Error EmailJS procesado:', errorMessage);
+    return new Error(errorMessage);
   }
 
   private formatAutoResponse(data: RsvpData): string {
@@ -194,7 +255,7 @@ Fuad y Naoual 💍`;
     return message;
   }
 
-  setMode(mode: 'both' | 'google-only' | 'formsubmit-only'): void {
+  setMode(mode: 'both' | 'google-only' | 'emailjs-only'): void {
     this.mode = mode;
   }
 
