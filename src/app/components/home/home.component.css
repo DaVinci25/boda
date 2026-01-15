@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.384) 0%, rgba(0, 0, 0, 0.185) 100%),
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(201, 162, 39, 0.3) 100%),
               url('../../../assets/images/flor.webp');
   background-size: cover;
   background-position: center;
@@ -21,7 +21,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(12, 1, 1, 0.315);
+  background: rgba(255, 255, 255, 0.4);
   z-index: 1;
 }
 
@@ -29,15 +29,13 @@
   position: relative;
   z-index: 2;
   animation: fadeInUp 1s ease-out;
-
 }
 
 .hero-title {
   font-size: 4rem;
   margin-bottom: 1rem;
-  color: wheat;
-  text-emphasis-color: var(--black);
-  text-shadow: 2px 2px 4px rgb(3, 0, 0);
+  color: var(--black);
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
 }
 
 .couple-names {
@@ -45,7 +43,6 @@
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  color: aliceblue;
   margin: 2rem 0;
   flex-wrap: wrap;
 }
@@ -54,8 +51,7 @@
   font-size: 2.5rem;
   font-family: 'Playfair Display', serif;
   font-weight: 600;
-  color: #A0522D; 
-  text-shadow: 1px 1px 3px rgb(12, 1, 1);
+  color: var(--brown);
 }
 
 .ampersand {
@@ -68,15 +64,14 @@
 .hero-date {
   font-size: 1.8rem;
   margin: 1rem 0;
-  color: var(--white);
+  color: var(--gray);
   font-weight: 300;
-
 }
 
 .hero-location {
   font-size: 1.3rem;
   margin-bottom: 2rem;
-  color: var(--white);
+  color: var(--gray);
 }
 
 .hero-buttons {
