@@ -348,7 +348,10 @@
   .cta-box .btn-primary {
     width: 100%;
     max-width: 100%;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    display: block;
+    text-align: center;
   }
 }
 
@@ -416,8 +419,11 @@
   .cta-box .btn-primary {
     width: 100%;
     max-width: 100%;
-    padding: 0.9rem;
-    font-size: 1rem;
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    display: block;
+    text-align: center;
   }
 }
 

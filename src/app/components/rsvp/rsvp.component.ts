@@ -101,7 +101,16 @@ export class RsvpComponent implements OnInit {
 
     this.rsvpService.submitRsvp(formData).subscribe({
       next: (response: any) => {
-        console.log('✅ RSVP enviado:', response);
+        console.log('✅ RSVP procesado:', response);
+        
+        // Verificar el estado del envío
+        if (response.emailSent && response.excelSaved) {
+          console.log('✅ Email enviado y guardado en Excel correctamente');
+        } else if (response.emailSent && !response.excelSaved) {
+          console.warn('⚠️ Email enviado pero no se pudo guardar en Excel');
+        } else if (!response.emailSent && response.excelSaved) {
+          console.warn('⚠️ Guardado en Excel pero no se pudo enviar el email');
+        }
         
         // Notificar a los novios (opcional)
         this.rsvpService.notifyCouple(formData).subscribe();
@@ -113,7 +122,8 @@ export class RsvpComponent implements OnInit {
       error: (error: Error) => {
         console.error('❌ Error:', error);
         this.error = true;
-        this.errorMessage = error.message || 'Error al enviar la confirmación';
+        this.errorMessage = error.message || 'Error al enviar la confirmación. Por favor, inténtalo de nuevo.';
+        this.isLoading = false;
       },
       complete: () => {
         this.isLoading = false;

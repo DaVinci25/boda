@@ -42,7 +42,7 @@ export class RsvpService {
   private readonly EMAILJS_SERVICE_ID = 'service_wzrp0vj'; // También mencionaste: service_n0cmfoe
   private readonly EMAILJS_TEMPLATE_ID = '__ejs-test-mail-service__'; // ⚠️ CAMBIA ESTE ID por el ID real de tu template en EmailJS
   
-  private mode: 'both' | 'google-only' | 'emailjs-only' = 'emailjs-only'; // Solo EmailJS para evitar duplicados en Excel
+  private mode: 'both' | 'google-only' | 'emailjs-only' = 'both'; // Envía email con EmailJS y guarda en Excel con Google Script
 
   constructor(private http: HttpClient) {
     // EmailJS se inicializa automáticamente al usar send()
@@ -63,17 +63,53 @@ export class RsvpService {
   }
 
   private sendToBoth(data: RsvpData): Observable<any> {
+    // Primero envía el email con EmailJS
     return this.sendToEmailJS(data).pipe(
-      catchError((emailjsError: any) => {
-        console.warn('⚠️ EmailJS falló, intentando solo Google Script:', emailjsError);
-        return this.sendToGoogleScript(data);
-      }),
       switchMap((emailjsResponse: any) => {
-        console.log('✅ EmailJS exitoso, enviando backup a Google Script...');
+        console.log('✅ EmailJS exitoso, guardando en Excel con Google Script...');
+        // Luego guarda en Excel con Google Script
         return this.sendToGoogleScript(data).pipe(
           catchError((googleError: any) => {
-            console.warn('⚠️ Google Script falló, pero EmailJS ya funcionó');
-            return of(emailjsResponse);
+            // Si Google Script falla, aún así retornamos éxito porque el email ya se envió
+            console.warn('⚠️ Google Script falló al guardar en Excel, pero el email ya se envió correctamente');
+            return of({ 
+              success: true, 
+              emailSent: true, 
+              excelSaved: false,
+              emailjsResponse: emailjsResponse,
+              error: 'No se pudo guardar en Excel, pero el email se envió correctamente'
+            });
+          }),
+          switchMap((googleResponse: any) => {
+            // Ambos exitosos
+            return of({
+              success: true,
+              emailSent: true,
+              excelSaved: true,
+              emailjsResponse: emailjsResponse,
+              googleResponse: googleResponse
+            });
+          })
+        );
+      }),
+      catchError((emailjsError: any) => {
+        // Si EmailJS falla, intenta al menos guardar en Excel
+        console.warn('⚠️ EmailJS falló, intentando guardar al menos en Excel:', emailjsError);
+        return this.sendToGoogleScript(data).pipe(
+          catchError((googleError: any) => {
+            // Ambos fallaron
+            console.error('❌ Ambos servicios fallaron');
+            return throwError(() => new Error('No se pudo enviar el email ni guardar en Excel. Por favor, inténtalo de nuevo.'));
+          }),
+          switchMap((googleResponse: any) => {
+            // Google Script funcionó pero EmailJS falló
+            return of({
+              success: true,
+              emailSent: false,
+              excelSaved: true,
+              googleResponse: googleResponse,
+              warning: 'Se guardó en Excel pero no se pudo enviar el email'
+            });
           })
         );
       })

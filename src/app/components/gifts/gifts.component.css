@@ -189,5 +189,60 @@
   .gifts-message {
     padding: 2rem 1.5rem;
   }
+
+  .cta-box {
+    padding: 2rem 1.5rem;
+  }
+
+  .cta-box h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-box p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-box .btn-primary {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    display: block;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .gift-option {
+    padding: 1.5rem 1rem;
+  }
+
+  .gifts-message {
+    padding: 1.5rem 1rem;
+  }
+
+  .gifts-message h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .cta-box h2 {
+    font-size: 1.3rem;
+  }
+
+  .cta-box p {
+    font-size: 0.95rem;
+  }
+
+  .cta-box .btn-primary {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+  }
 }
 
