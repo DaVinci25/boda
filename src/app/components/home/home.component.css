@@ -35,9 +35,9 @@
 .hero-title {
   font-size: 4rem;
   margin-bottom: 1rem;
-  color: wheat;
+  color: #F5E6D3;
   text-emphasis-color: var(--black);
-  text-shadow: 2px 2px 4px rgb(3, 0, 0);
+  text-shadow: 2px 2px 4px rgb(0, 0, 0);
 }
 
 .couple-names {
@@ -54,13 +54,13 @@
   font-size: 2.5rem;
   font-family: 'Playfair Display', serif;
   font-weight: 600;
-  color: #A0522D; 
-  text-shadow: 1px 1px 3px rgb(12, 1, 1);
+  color: #F5E6D3; 
+  text-shadow: 1px 1px 3px rgb(0, 0, 0);
 }
 
 .ampersand {
   font-size: 3rem;
-  color: var(--primary-gold);
+  color: #F5E6D3;
   font-family: 'Playfair Display', serif;
   font-style: italic;
 }
@@ -94,7 +94,7 @@
   transform: translateX(-50%);
   animation: bounce 2s infinite;
   font-size: 2rem;
-  color: var(--primary-gold);
+  color: #000000;
 }
 
 @keyframes fadeInUp {
@@ -159,7 +159,7 @@
 .lead {
   font-size: 1.3rem;
   font-weight: 300;
-  color: var(--brown);
+  color: var(--black);
   margin-bottom: 1.5rem;
   font-style: italic;
 }
@@ -195,7 +195,7 @@
 }
 
 .info-card h3 {
-  color: var(--brown);
+  color: var(--black);
   margin-bottom: 1rem;
 }
 
@@ -205,7 +205,7 @@
 }
 
 .map-link {
-  color: var(--primary-gold);
+  color: var(--black);
   font-weight: 600;
   margin-top: 0.5rem;
   display: inline-block;
@@ -221,13 +221,13 @@
 }
 
 .cta-section {
-  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
-  color: var(--white);
+  background: var(--black);
+  color: var(--primary-beige);
   text-align: center;
 }
 
 .cta-content h2 {
-  color: var(--white);
+  color: var(--primary-beige);
   margin-bottom: 1rem;
 }
 
@@ -238,12 +238,12 @@
 }
 
 .cta-section .btn-primary {
-  background: var(--white);
-  color: var(--primary-gold);
+  background: var(--primary-beige);
+  color: var(--black);
 }
 
 .cta-section .btn-primary:hover {
-  background: var(--off-white);
+  background: var(--light-beige);
 }
 
 @media (max-width: 768px) {
