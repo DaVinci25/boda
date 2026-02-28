@@ -19,7 +19,7 @@ export class FaqComponent {
   faqs: Faq[] = [
     {
       question: '¿Hasta cuándo puedo confirmar mi asistencia?',
-      answer: 'Por favor, confirma tu asistencia antes del <strong>1 de Febrero de 2026</strong>. Esto nos ayudará a organizar mejor el evento y asegurar que todo esté perfecto para el día de la boda.',
+      answer: 'Por favor, confirma tu asistencia antes del <strong>20 de Mayo de 2026</strong>. Esto nos ayudará a organizar mejor el evento y asegurar que todo esté perfecto para el día de la boda.',
       open: false
     },
     {
