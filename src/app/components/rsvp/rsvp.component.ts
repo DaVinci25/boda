@@ -34,7 +34,7 @@ export class RsvpComponent implements OnInit {
       attendance: ['', Validators.required],
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.email]],
       phone: [''],
       totalGuests: [1, [Validators.required, Validators.min(1)]],
       guestNames: [''],
