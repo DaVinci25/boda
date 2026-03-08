@@ -29,7 +29,7 @@ export class FaqComponent {
     },
     {
       question: '¿Cuál es el dress code?',
-      answer: 'El dress code es <strong>elegante / semi-formal</strong>. Para hombres: traje o chaqueta y pantalón elegante. Para mujeres: vestido largo o corto elegante.',
+      answer: 'El dress code es <strong>elegante / semi-formal</strong>. Para hombres: traje o chaqueta y pantalón elegante. Para mujeres: vestido elegante.',
       open: false
     },
    
